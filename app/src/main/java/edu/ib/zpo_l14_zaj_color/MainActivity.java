@@ -54,7 +54,7 @@ public class MainActivity extends Activity implements SensorEventListener {
         float az = values[2];
 
         double accelerateSquareRoot = (Math.pow(ax, 2) + Math.pow(ay, 2) + Math.pow(az, 2))
-                / (Math.pow(SensorManager.GRAVITY_EARTH, 2));
+                / (Math.pow(SensorManager.GRAVITY_EARTH, 2)); // zmniejszenie wartości w celu usprawnienia doboru wartości zmiany rekacji na wstrząśnięcie
         long actualTime = System.currentTimeMillis();; // zwracanie aktualnego czasu pomiaru ms
 
         if (accelerateSquareRoot >= 2) {// reakcja na lekkie wstrząśnięcie
