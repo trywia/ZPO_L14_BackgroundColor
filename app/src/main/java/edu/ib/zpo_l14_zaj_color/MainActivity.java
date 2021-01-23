@@ -16,7 +16,7 @@ public class MainActivity extends Activity implements SensorEventListener {
     private SensorManager sensorManager;
     private boolean isColor = false; // zmienna logiczna
     private View view;              // stworzenie widoku
-    private long lastUpdate;        // zmienna czasu pomiaru
+    private long lastTime;        // zmienna czasu pomiaru
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -26,7 +26,7 @@ public class MainActivity extends Activity implements SensorEventListener {
         view.setBackgroundColor(Color.RED); // pierwszy kolor czerwony
 
         sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE); // chęć korzystania z czujników sprzętowych
-        lastUpdate = System.currentTimeMillis(); // ustalenie czasu pomiaru ms
+        lastTime = System.currentTimeMillis(); // ustalenie czasu pomiaru ms
         sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         // korzystanie z akcelerometru - przyspieszenie telefonu, wraz ze składową przyspieszenia ziemskiego
     }
@@ -53,16 +53,15 @@ public class MainActivity extends Activity implements SensorEventListener {
         float ay = values[1];
         float az = values[2];
 
-        double accelerateSquareRoot = (Math.pow(ax, 2) + Math.pow(ay, 2) + Math.pow(az, 2))
-                / (Math.pow(SensorManager.GRAVITY_EARTH, 2)); // zmniejszenie wartości w celu usprawnienia doboru wartości zmiany rekacji na wstrząśnięcie
+        double placementChange = (Math.pow(ax, 2) + Math.pow(ay, 2) + Math.pow(az, 2)) / 100; // zmniejszenie wartości w celu usprawnienia doboru wartości zmiany rekacji na wstrząśnięcie
         long actualTime = System.currentTimeMillis();; // zwracanie aktualnego czasu pomiaru ms
 
-        if (accelerateSquareRoot >= 2) {// reakcja na lekkie wstrząśnięcie
+        if (placementChange >= 2) {// reakcja na lekkie wstrząśnięcie
 
-            if (actualTime - lastUpdate < 200) { // zmiany mogą być rejestrowane co 200 ms
+            if (actualTime - lastTime < 250) { // zmiany mogą być rejestrowane co 250 ms
                 return;
             }
-            lastUpdate = actualTime; // nadpisanie czasu ostatniego wstrząśnięcia
+            lastTime = actualTime; // nadpisanie czasu ostatniego wstrząśnięcia
 
             if (isColor) {
                 // losowanie koloru tła
